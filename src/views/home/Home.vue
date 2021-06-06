@@ -34,7 +34,7 @@ export default {
     getHomeMultidata().then((res) => {
       console.log("Home_res:", res);
       this.banners = res.data.banner.list;
-      this.recommends = res.data.recommend;
+      this.recommends = res.data.recommend.list;
     });
   },
 };

@@ -14,10 +14,10 @@ export default {
       type: Number,
       default: 0,
     },
-    pullUpLoad: {
-      type: Boolean,
-      default: false,
-    },
+    // pullUpLoad: {
+    //   type: Boolean,
+    //   default: false,
+    // },
   },
   data() {
     return {
@@ -31,14 +31,18 @@ export default {
     this.scroll = new BScroll(this.$refs.wrapper, {
       //点击事件
       click: true,
-      //probeType滚轮事件
+      //probeType支持监听scroll的x,y变动
       probeType: this.probeType,
       //上拉加载
-      pullUpLoad:this.pullUpLoad,
+      pullUpLoad: this.pullUpLoad,
       //鼠标滚轮
       mouseWheel: this.pullUpLoad,
       /* mouseWheel: true, */
+      // observeDOM: true,
+      // observeImage: true,
     })
+    //打印一下this.scroll
+    // console.log(this.scroll);
     //2.监听滚动的位置
     this.scroll.on('scroll', (position) => {
       //console.log(position)
@@ -46,11 +50,11 @@ export default {
       this.$emit('scroll', position)
     })
     //3.监听上拉事件
-    this.scroll.on('pullingUp', () => {
-      // console.log('上拉加载更多')
-      //将上拉加载的事件暴露给父组件
-      this.$emit('pullingUp')
-    })
+    // this.scroll.on('pullingUp', () => {
+    //   // console.log('上拉加载更多')
+    //   //将上拉加载的事件暴露给父组件
+    //   this.$emit('pullingUp')
+    // })
   },
   methods: {
     //封装一个滑轮指定位置方法
@@ -58,13 +62,13 @@ export default {
       this.scroll.scrollTo(x, y, time)
     },
     //封装一个上拉加载的重置事件
-    finishPullUp(){
-      this.scroll.finishPullUp();
+    finishPullUp() {
+      this.scroll.finishPullUp()
     },
-    refresh(){
+    refresh() {
       //刷新异步后的容器高度(初始化)
-      this.scroll.refresh();
-    }
+      this.scroll.refresh()
+    },
   },
 }
 </script>

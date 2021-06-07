@@ -1,10 +1,12 @@
 <template>
   <div class="goods-item">
-    <img :src="goodsItem.show.img" alt="" />
+    <!-- :width="goodsItem.show.w" -->
+    <!-- :height="goodsItem.show.h" -->
+    <img :src="goodsItem.show.img" @load="imgageLoad" />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
-      <span class="price">{{goodsItem.price}}</span>
-      <span class="collect">{{goodsItem.cfav}}</span>
+      <span class="price">{{ goodsItem.price }}</span>
+      <span class="collect">{{ goodsItem.cfav }}</span>
     </div>
   </div>
 </template>
@@ -18,6 +20,16 @@ export default {
       default() {
         return {}
       },
+    },
+  },
+  methods: {
+    //原生js监听图片(img.onload=function(){})
+    //Vue中监听图片(@load="方法名")
+    imgageLoad() {
+      // console.log('imageLoad+1')
+      // 事件总线发送事件
+      // console.log('发送成功');
+      this.$bus.$emit('itemImageLoad')
     },
   },
 }

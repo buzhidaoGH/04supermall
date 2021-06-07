@@ -4,13 +4,13 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
+    <!-- @pullingUp="loadMore" -->
     <scroll
       class="content"
       ref="scroll"
       :probeType="3"
       @scroll="contentScroll"
       :pullUpLoad="true"
-      @pullingUp="loadMore"
     >
       <!-- 轮播图 -->
       <home-swiper :banners="banners"></home-swiper>
@@ -77,6 +77,13 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+
+    //3.监听item中每一个图片加载完成
+    this.$bus.$on('itemImageLoad', () => {
+      // console.log('监听成功')
+      //加载一次图片就刷新一下scroll
+      this.$refs.scroll.refresh()
+    })
   },
   methods: {
     /* 事件监听相关方法 */
@@ -106,9 +113,9 @@ export default {
         this.isShowTop = false
       }
     },
-    loadMore() {
-      this.getHomeGoods(this.currentType)
-    },
+    // loadMore() {
+    //   this.getHomeGoods(this.currentType)
+    // },
 
     /* 网络请求相关方法 */
     //1.请求home的tabbar数据
@@ -126,17 +133,15 @@ export default {
     getHomeGoods(type) {
       const page = this.goods[type].page + 1
       getHomeGoods(type, page).then((res) => {
-        //存储goods的pop流行数据
-        //存储goods的new新款数据
-        //存储goods的sell精选数据
+        //存储goods的pop流行,new新款,sell精选数据
         this.goods[type].list.push(...res.data.list)
         this.goods[type].page += 1
         //打印
         // console.log(type, res.data.list)
         //上拉刷新监听的重置
-        this.$refs.scroll.finishPullUp()
+        // this.$refs.scroll.finishPullUp()
         //刷新异步后的容器高度(初始化)
-        this.$refs.scroll.refresh()
+        // this.$refs.scroll.refresh()
       })
     },
   },

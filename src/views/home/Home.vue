@@ -4,18 +4,28 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <!-- 轮播图 -->
-    <home-swiper :banners="banners"></home-swiper>
-    <!-- 推荐 -->
-    <recommend-view :recommends="recommends"></recommend-view>
-    <!-- 本周流行/潮流 -->
-    <feature-view></feature-view>
-    <tab-control
-      :titles="['流行', '新款', '精选']"
-      class="tab-control"
-      @tabClick="tabClick"
-    ></tab-control>
-    <goods-list :goods="goods['pop'].list"></goods-list>
+    <scroll
+      class="content"
+      ref="scroll"
+      :probeType="3"
+      @scroll="contentScroll"
+      :pullUpLoad="true"
+      @pullingUp="loadMore"
+    >
+      <!-- 轮播图 -->
+      <home-swiper :banners="banners"></home-swiper>
+      <!-- 推荐 -->
+      <recommend-view :recommends="recommends"></recommend-view>
+      <!-- 本周流行/潮流 -->
+      <feature-view></feature-view>
+      <tab-control
+        :titles="['流行', '新款', '精选']"
+        class="tab-control"
+        @tabClick="tabClick"
+      ></tab-control>
+      <goods-list :goods="showGoods"></goods-list>
+    </scroll>
+    <back-top @click.native="backClick" v-show="isShowTop"></back-top>
   </div>
 </template>
 
@@ -24,6 +34,8 @@
 import NavBar from 'components/common/navbar/NavBar.vue'
 import TabControl from 'components/content/TabControl'
 import GoodsList from 'components/content/GoodsList'
+import Scroll from 'components/common/scroll/Scroll'
+import BackTop from 'components/content/BackTop'
 
 //子组件模块
 import HomeSwiper from './childComps/HomeSwiper'
@@ -42,6 +54,8 @@ export default {
     RecommendView,
     FeatureView,
     GoodsList,
+    Scroll,
+    BackTop,
   },
   data() {
     return {
@@ -52,6 +66,8 @@ export default {
         new: { page: 0, list: [] },
         sell: { page: 0, list: [] },
       },
+      currentType: 'pop',
+      isShowTop: false,
     }
   },
   created() {
@@ -64,8 +80,34 @@ export default {
   },
   methods: {
     /* 事件监听相关方法 */
-    tabClick(){
-
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.currentType = 'pop'
+          break
+        case 1:
+          this.currentType = 'new'
+          break
+        case 2:
+          this.currentType = 'sell'
+          break
+      }
+    },
+    backClick() {
+      // console.log('组件点击')
+      this.$refs.scroll.scrollTo(0, 0, 600)
+    },
+    contentScroll(position) {
+      //scroll的x,y值
+      //console.log(position);
+      if (position.y < -1000) {
+        this.isShowTop = true
+      } else {
+        this.isShowTop = false
+      }
+    },
+    loadMore() {
+      this.getHomeGoods(this.currentType)
     },
 
     /* 网络请求相关方法 */
@@ -90,8 +132,17 @@ export default {
         this.goods[type].list.push(...res.data.list)
         this.goods[type].page += 1
         //打印
-        //console.log(type, res)
+        // console.log(type, res.data.list)
+        //上拉刷新监听的重置
+        this.$refs.scroll.finishPullUp()
+        //刷新异步后的容器高度(初始化)
+        this.$refs.scroll.refresh()
       })
+    },
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list
     },
   },
 }
@@ -100,7 +151,9 @@ export default {
 <style scoped>
 #home {
   padding-top: 44px;
-  padding-bottom: 49px;
+  height: 100vh;
+  position: relative;
+  /* overflow: hidden; */
 }
 .home-nav {
   background-color: var(--color-tint);
@@ -112,9 +165,21 @@ export default {
   top: 0;
   z-index: 9;
 }
-.tab-control {
+/* .tab-control {
   position: sticky;
   top: 44px;
   z-index: 9;
+} */
+.content {
+  /* height: 300px; */
+  overflow: hidden;
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
 }
+/* .content {
+  height: calc(100% - 93px);
+  overflow: hidden;
+  margin-top: 44px;
+} */
 </style>

@@ -28,7 +28,7 @@ const routes = [
     component: () => import('../views/profile/Profile.vue'),
   },
   {
-    path: '/detail',
+    path: '/detail/:iid',
     component: () => import('../views/detail/Detail.vue'),
   },
 ]

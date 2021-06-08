@@ -35,7 +35,7 @@ export default {
     itemClick() {
       // console.log('跳转详情页')
       this.$router.push('/detail/'+this.goodsItem.iid)
-      
+
       // this.$router.push({
       //   path:'/detail',
       //   query:{

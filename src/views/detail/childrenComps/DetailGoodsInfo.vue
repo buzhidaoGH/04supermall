@@ -5,6 +5,7 @@
       <div class="desc">{{ detailInfo.desc }}</div>
       <div class="end"></div>
     </div>
+
     <div class="info-key">{{ detailInfo.detailImage[0].key }}</div>
     <div class="info-list">
       <img
@@ -47,6 +48,7 @@ export default {
     detailInfo() {
       // 获取图片的个数
       this.imagesLength = this.detailInfo.detailImage[0].list.length
+      console.log(this.imagesLength);
     },
   },
 }

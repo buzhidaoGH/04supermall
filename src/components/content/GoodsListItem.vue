@@ -2,7 +2,7 @@
   <div class="goods-item" @click="itemClick">
     <!-- :width="goodsItem.show.w" -->
     <!-- :height="goodsItem.show.h" -->
-    <img :src="goodsItem.show.img" @load="imgageLoad" />
+    <img :src="showImage" @load="imgageLoad" />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
@@ -22,6 +22,12 @@ export default {
       },
     },
   },
+  computed: {
+    showImage() {
+      // console.log(this.goodsItem);
+      return this.goodsItem.image || this.goodsItem.show.img
+    },
+  },
   methods: {
     //原生js监听图片(img.onload=function(){})
     //Vue中监听图片(@load="方法名")
@@ -29,12 +35,18 @@ export default {
       // console.log('imageLoad+1')
       // 事件总线发送事件
       // console.log('发送成功');
-      this.$bus.$emit('itemImageLoad')
+      this.$bus.$emit('itemImgLoad')
+      // if (this.$route.path.indexOf('/home')) {
+      //   this.$bus.$emit('itemImageLoad')
+      // }
+      // if (双向事件各自监听) {
+        
+      // }
     },
     //跳转到详情页
     itemClick() {
       // console.log('跳转详情页')
-      this.$router.push('/detail/'+this.goodsItem.iid)
+      this.$router.push('/detail/' + this.goodsItem.iid)
 
       // this.$router.push({
       //   path:'/detail',

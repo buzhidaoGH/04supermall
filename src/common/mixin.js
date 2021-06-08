@@ -1,37 +1,38 @@
-import {debounce} from "./utils"
-import BackTop from 'components/content/backTop/BackTop'
+import { debounce } from './utils'
+import BackTop from 'components/content/BackTop'
 export const itemListenerMixin = {
-  data(){
+  data() {
     return {
-      itemImgListener: null
+      itemImgListener: null,
     }
   },
   mounted() {
-    let newRefresh = debounce(this.$refs.scroll.refresh, 100)
+    const refresh = debounce(this.$refs.scroll.refresh, 400)
     this.itemImgListener = () => {
-      newRefresh()
+      // console.log('图片加载完成刷新');
+      refresh()
     }
-    this.$bus.$on('itemImgLoad',this.itemImgListener)
-  }
+    this.$bus.$on('itemImgLoad', this.itemImgListener)
+    console.log('我是混入的图片加载完成');
+  },
 }
-
 
 export const backTomMixin = {
   components: {
-    BackTop
+    BackTop,
   },
   data() {
     return {
-      isShowBackTop: false
+      isShowBackTop: false,
     }
   },
   methods: {
     backClick() {
-      this.$refs.scroll.scrollTo(0,0,300)
+      this.$refs.scroll.scrollTo(0, 0, 300)
     },
-    listenShowBackTop(position){
+    listenShowBackTop(position) {
       // 判断BackTop是否显示
-     this.isShowBackTop = (-position.y) > 1000
-    }
-  }
+      this.isShowBackTop = -position.y > 1000
+    },
+  },
 }

@@ -58,6 +58,8 @@ import FeatureView from './childComps/FeatureView'
 
 //插件模块(方法)
 import { getHomeMultidata, getHomeGoods } from 'network/home.js'
+// import { debounce } from 'common/utils.js'
+import {itemListenerMixin} from 'common/mixin.js';
 
 export default {
   name: 'Home',
@@ -71,6 +73,7 @@ export default {
     Scroll,
     BackTop,
   },
+  mixins:[itemListenerMixin],
   data() {
     return {
       banners: [],
@@ -85,6 +88,7 @@ export default {
       tabOffsetTop: 0,
       isTabFixed: false,
       saveY: 0,
+      // itemImgListener: null,
     }
   },
   created() {
@@ -97,15 +101,17 @@ export default {
   },
   mounted() {
     //创建防抖动函数包装(图片加载监听)
-    const refresh = this.debounce(this.$refs.scroll.refresh, 400)
-    //3.监听item中每一个图片加载完成
-    this.$bus.$on('itemImageLoad', () => {
-      // console.log('监听成功')
-      //加载一次图片就刷新一下scroll
-      //this.$refs.scroll && this.$refs.scroll.refresh()
-      //防抖函数处理后的使用
-      refresh()
-    })
+    // const refresh = debounce(this.$refs.scroll.refresh, 400)
+    // //3.监听item中每一个图片加载完成
+    // //对监听的事件进行保存
+    // this.itemImgListener = () => {
+    //   // console.log('监听成功')
+    //   //加载一次图片就刷新一下scroll
+    //   //this.$refs.scroll && this.$refs.scroll.refresh()
+    //   //防抖函数处理后的使用
+    //   refresh()
+    // }
+    // this.$bus.$on('itemImageLoad', this.itemImgListener)
   },
   activated() {
     //活跃调用一次
@@ -115,9 +121,11 @@ export default {
   },
   deactivated() {
     //不活跃调用一次
-    // console.log('不活跃')
+    console.log('首页不活跃')//保存Y值
     this.saveY = this.$refs.scroll.getScrollY()
-    
+
+    //2.取消全局事件的监听
+    this.$bus.$off('itemImgLoad', this.itemImgListener)
   },
   methods: {
     /* 事件监听相关方法 */

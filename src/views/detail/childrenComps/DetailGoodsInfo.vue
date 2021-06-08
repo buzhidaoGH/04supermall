@@ -1,18 +1,17 @@
 <template>
-  <div v-if="Object.keys(detailInfo).length !== 0" class="goods-info">
+  <div v-if="Object.keys(detailInfo).length !== 0" class="detail-goods-info">
     <div class="info-desc clear-fix">
       <div class="start"></div>
       <div class="desc">{{ detailInfo.desc }}</div>
       <div class="end"></div>
     </div>
-
     <div class="info-key">{{ detailInfo.detailImage[0].key }}</div>
     <div class="info-list">
       <img
         v-for="(item, index) in detailInfo.detailImage[0].list"
         :key="index"
-        :src="item"
         @load="imgLoad"
+        :src="item"
         alt=""
       />
     </div>
@@ -22,6 +21,13 @@
 <script>
 export default {
   name: 'DetailGoodsInfo',
+  watch: {
+    detailInfo() {
+      //获取图片的个数
+      this.imagesLength = this.detailInfo.detailImage[0].list.length
+      console.log(this.imagesLength)
+    },
+  },
   props: {
     detailInfo: {
       type: Object,
@@ -38,65 +44,34 @@ export default {
   },
   methods: {
     imgLoad() {
-      // 判断, 所有的图片都加载完了, 那么进行一次回调就可以了.
-      if (++this.counter === this.imagesLength) {
+      // console.log(this.counter);
+      //判断，所有图片都加载完成，那么进行一次回调就可以了
+      if (++this.counter == this.imagesLength) {
         this.$emit('imageLoad')
+        console.log('details全加载完成')
       }
-    },
-  },
-  watch: {
-    detailInfo() {
-      // 获取图片的个数
-      this.imagesLength = this.detailInfo.detailImage[0].list.length
-      console.log(this.imagesLength);
     },
   },
 }
 </script>
 
 <style scoped>
-.goods-info {
-  padding: 20px 0;
-  border-bottom: 5px solid #f2f5f8;
+.detail-goods-info {
+  height: auto;
 }
-.info-desc {
-  padding: 0 15px;
-}
-.info-desc .start,
-.info-desc .end {
-  width: 90px;
-  height: 1px;
-  background-color: #a3a3a5;
-  position: relative;
-}
-.info-desc .start {
-  float: left;
-}
-.info-desc .end {
-  float: right;
-}
-.info-desc .start::before,
-.info-desc .end::after {
-  content: '';
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background-color: #333;
-  bottom: 0;
-}
-.info-desc .end::after {
-  right: 0;
-}
-.info-desc .desc {
-  padding: 15px 0;
-  font-size: 14px;
+.desc {
+  text-indent: 2em;
+  padding: 2%;
+  line-height: 20px;
 }
 .info-key {
-  margin: 10px 0 10px 15px;
-  color: #333;
-  font-size: 15px;
+  text-align: center;
+  line-height: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 5px 0;
 }
-.info-list img {
+img {
   width: 100%;
 }
 </style>

@@ -13,12 +13,17 @@
       <detail-base-info :goods="goods"></detail-base-info>
       <!-- 店铺信息 -->
       <detail-shop-info :shop="shop"></detail-shop-info>
-      <!-- <detail-goods-info
-        :detail-info="detailInfo"
+      <!-- 商品信息图片(bug解决了,style的问题) -->
+      <detail-goods-info
+        :detailInfo="detailInfo"
         @imageLoad="imageLoad"
-      ></detail-goods-info> -->
+      ></detail-goods-info>
+      <!-- 商品信息段 -->
       <detail-param-info :param-info="paramInfo"></detail-param-info>
+      <!-- 评论消息部分 -->
       <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
+      <!-- 商品推荐栏 -->
+      <goods-list :goods="recommends"></goods-list>
     </scroll>
   </div>
 </template>
@@ -40,6 +45,9 @@ import {
   getRecommend,
 } from 'network/detail.js'
 import Scroll from 'components/common/scroll/Scroll.vue'
+import GoodsList from 'components/content/GoodsList'
+//import { debounce } from 'common/utils.js'
+import { itemListenerMixin } from 'common/mixin.js'
 
 export default {
   name: 'Detail',
@@ -52,7 +60,9 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfo,
+    GoodsList,
   },
+  mixins: [itemListenerMixin],
   data() {
     return {
       iid: null,
@@ -62,6 +72,8 @@ export default {
       detailInfo: {},
       paramInfo: {},
       commentInfo: {},
+      recommends: [],
+      // itemImgListener: null,
     }
   },
   created() {
@@ -98,22 +110,27 @@ export default {
         this.commentInfo = data.rate.list[0]
       }
     })
-
     //3.请求推荐数据
     getRecommend().then((res) => {
-      console.log(res);
+      // console.log(res);
+      this.recommends = res.data.list
     })
   },
   methods: {
     imageLoad() {
       // 图片加载完后刷新scroll
-      console.log('调用了哦')
+      console.log('调用了refresh哦')
       // setTimeout(() => {
       // console.log(this.$refs.scroll.refresh());
       // console.log(this.$refs.scroll);
       this.$refs.scroll.refresh()
       // }, 1000);
     },
+  },
+  mounted() {},
+  destroyed() {
+    // console.log('嗯哼?');
+    this.$bus.$off('itemImgLoad', this.itemImgLister)
   },
 }
 </script>

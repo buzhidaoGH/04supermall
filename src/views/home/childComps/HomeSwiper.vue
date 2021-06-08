@@ -3,30 +3,43 @@
     <swiper>
       <swiper-item v-for="item in banners" :key="item.index">
         <a :href="item.link">
-          <img :src="item.image" alt="" />
+          <img :src="item.image" alt="" @load="imageLoad" />
         </a>
       </swiper-item>
     </swiper>
   </div>
 </template>
 <script>
-import { Swiper, SwiperItem } from "components/common/swiper/index.js";
+import { Swiper, SwiperItem } from 'components/common/swiper/index.js'
 export default {
-  name: "HomeSwiper",
+  name: 'HomeSwiper',
   props: {
     banners: {
       type: Array,
       default() {
-        return [];
+        return []
       },
     },
+  },
+  data() {
+    return {
+      isLoad: false,
+    }
   },
   components: {
     Swiper,
     SwiperItem,
   },
-};
+  methods: {
+    imageLoad() {
+      if (!this.isLoad) {
+        // console.log('轮播图');
+        this.$emit('swiperImageLoad')
+        this.isLoad = true
+      }
+    },
+  },
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

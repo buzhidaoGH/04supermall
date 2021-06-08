@@ -14,10 +14,10 @@ export default {
       type: Number,
       default: 0,
     },
-    // pullUpLoad: {
-    //   type: Boolean,
-    //   default: false,
-    // },
+    pullUpLoad: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -50,16 +50,18 @@ export default {
       this.$emit('scroll', position)
     })
     //3.监听上拉事件
-    // this.scroll.on('pullingUp', () => {
-    //   // console.log('上拉加载更多')
-    //   //将上拉加载的事件暴露给父组件
-    //   this.$emit('pullingUp')
-    // })
+    if (this.pullUpLoad) {
+      this.scroll.on('pullingUp', () => {
+        // console.log('上拉加载更多')
+        //将上拉加载的事件暴露给父组件
+        this.$emit('pullingUp')
+      })
+    }
   },
   methods: {
     //封装一个滑轮指定位置方法
     scrollTo(x, y, time = 300) {
-      this.scroll.scrollTo(x, y, time)
+      this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x, y, time)
     },
     //封装一个上拉加载的重置事件
     finishPullUp() {
@@ -67,7 +69,11 @@ export default {
     },
     refresh() {
       //刷新异步后的容器高度(初始化)
-      this.scroll.refresh()
+      // console.log('-----');
+      this.scroll && this.scroll.refresh()
+    },
+    getScrollY() {
+      return this.scroll ? this.scroll.y : 0
     },
   },
 }

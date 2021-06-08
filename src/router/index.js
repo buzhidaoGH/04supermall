@@ -27,6 +27,10 @@ const routes = [
     path: '/profile',
     component: () => import('../views/profile/Profile.vue'),
   },
+  {
+    path: '/detail',
+    component: () => import('../views/detail/Detail.vue'),
+  },
 ]
 //2.创建router
 const router = new VueRouter({

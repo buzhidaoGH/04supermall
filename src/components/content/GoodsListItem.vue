@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="itemClick">
     <!-- :width="goodsItem.show.w" -->
     <!-- :height="goodsItem.show.h" -->
     <img :src="goodsItem.show.img" @load="imgageLoad" />
@@ -30,6 +30,17 @@ export default {
       // 事件总线发送事件
       // console.log('发送成功');
       this.$bus.$emit('itemImageLoad')
+    },
+    //跳转到详情页
+    itemClick() {
+      // console.log('跳转详情页')
+      this.$router.push('/detail/'+this.goodsItem.iid)
+      
+      // this.$router.push({
+      //   path:'/detail',
+      //   query:{
+      //   }
+      // })
     },
   },
 }

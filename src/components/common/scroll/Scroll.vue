@@ -80,7 +80,7 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
+/* .wrapper {
   overflow: hidden;
-}
+} */
 </style>

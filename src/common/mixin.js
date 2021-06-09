@@ -30,9 +30,14 @@ export const backTomMixin = {
     backClick() {
       this.$refs.scroll.scrollTo(0, 0, 300)
     },
-    listenShowBackTop(position) {
+    contenBackScroll(position) {
       // 判断BackTop是否显示
-      this.isShowBackTop = -position.y > 1000
+      // console.log('监听listenShowBackTop');
+      if (position.y < -1000) {
+        this.isShowBackTop = true
+      } else {
+        this.isShowBackTop = false
+      }
     },
   },
 }

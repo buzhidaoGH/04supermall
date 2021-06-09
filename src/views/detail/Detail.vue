@@ -43,7 +43,7 @@
     </scroll>
     <!-- 底部栏 -->
     <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
-    <!-- 返回 -->
+    <!-- 返回顶部 -->
     <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
@@ -154,7 +154,7 @@ export default {
     })
   },
   methods: {
-    //监听加入购物车
+    //监听加入购物车(子组件点击了监听加入购物车)
     addToCart() {
       // console.log('加入购物车');
       //1.获取购物车需要展示的信息,然后展示
@@ -164,13 +164,21 @@ export default {
       product.desc = this.goods.desc
       product.price = this.goods.realPrice
       product.iid = this.iid
-      //2.将商品添加到购物车内
+      //2.将商品添加到购物车内(1.Promis,2.mapActions)
       // console.log(product);
       //this.$store.cartList.push(product)//不要这么做,建议mutations
       //通过commit操作mutations中函数
       // this.$store.commit('addCart',product)
       //通过Dispatcher分发给actions
-      this.$store.dispatch('addCart',product)
+      this.$store
+        .dispatch('addCart', product)
+        .then((res) => {//添加成功后,显示Toast组件,组件显示完后跳转
+
+        })
+        .then((res) => {
+          //添加到购物车后信息传递成功后,跳转到/cart购物车页面
+          this.$router.replace('/cart').catch((err) => {})
+        })
     },
     //持续监听当前的x,y数据
     contenScroll(position) {

@@ -1,24 +1,24 @@
 <template>
-  <div class="check-button" :class="{check: isChecked}">
+  <div class="check-button" :class="{ check: isChecked }">
     <!-- <img :src="~assets/img/cart/tick.svg" alt=""> -->
-    <img src="~assets/img/cart/tick.svg" alt="">
+    <img src="~assets/img/cart/tick.svg" alt="" />
   </div>
 </template>
 
 <script>
 export default {
-  name: "CheckButton",
-  props:{
+  name: 'CheckButton',
+  props: {
     isChecked: {
-      type:Boolean,
-      default: false
-    }
-  }
+      type: Boolean,
+      default: false,
+    },
+  },
 }
 </script>
 
 <style scoped>
-.check-button{
+.check-button {
   width: 18px;
   height: 18px;
   border: 1px solid #aaa;
@@ -26,7 +26,7 @@ export default {
   text-align: center;
   line-height: 18px;
 }
-.check{
+.check {
   background-color: red;
   border-color: red;
 }

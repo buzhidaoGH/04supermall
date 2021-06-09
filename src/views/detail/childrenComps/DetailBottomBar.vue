@@ -27,7 +27,8 @@ export default {
   name: "DetailBottomBar",
   methods:{
     addToCart(){
-      this.$emit("addToCart")
+      //向父组件发出成功添加的事件,父组件监听
+      this.$emit("addToCart");
     },
     buyClick(){
       this.$toast.show("抱歉，该功能暂未开发~",1000)

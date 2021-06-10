@@ -2,7 +2,7 @@
   <div class="goods-item" @click="itemClick">
     <!-- :width="goodsItem.show.w" -->
     <!-- :height="goodsItem.show.h" -->
-    <img :src="showImage" @load="imgageLoad" />
+    <img v-lazy="showImage" @load="imgageLoad" />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
